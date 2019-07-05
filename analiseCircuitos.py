@@ -53,10 +53,10 @@ print ("--/--/--")
 # Polos e Zeros
 fig, ax = plt.subplots()
 plt.title('Polos e Zeros')
-ax.scatter(p.real, p.imag)
-t1 = plt.plot(p.real, p.imag, 'rx', ms=100)
+ax.scatter(polos.real, polos.imag)
+t1 = plt.plot(polos.real, polos.imag, 'rx', ms=100)
 plt.setp( t1, markersize=10.0, markeredgewidth=1.0, markeredgecolor='k', markerfacecolor='g')
-t2 = plt.plot(z.real, z.imag, 'go', ms=10)
+t2 = plt.plot(zeros.real, zeros.imag, 'go', ms=10)
 plt.setp( t2, markersize=12.0, markeredgewidth=3.0, markeredgecolor='r', markerfacecolor='r')
 ax.grid()
 
