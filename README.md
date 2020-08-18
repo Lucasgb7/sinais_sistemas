@@ -5,3 +5,6 @@
 
 ### Eletrônica Aplicada
 - Simulações de circuitos elétricos.
+
+### Processamento Digitais de Sinais
+- Implementação de algoritmos de processamento digital de sinais em DSP, executando-os em ambiente de simulação.
