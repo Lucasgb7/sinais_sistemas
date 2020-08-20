@@ -6,6 +6,7 @@
 '''
 import numpy as np
 import matplotlib.pyplot as plt
+import pickle
 
 with open ('alo.pcm', 'rb') as f:   # Le o arquivo em binario
     buf = f.read ()
@@ -23,11 +24,11 @@ plt.xlabel('Número de Amostras')
 plt.show()
 
 data_length = len(data) # Tamanho do sinal de entrada
-values = np.zeros((data_length, 1)) # Valores intermediarios
+values = np.zeros(data_length) # Valores intermediarios
 gain = 0.5  # Ganho a ser multiplicado
 
 for i in range(data_length):
-    values = data[i] * gain # Le as amostras e multiplica cada uma pelo ganho
+    values[i] = data[i] * gain # Le as amostras e multiplica cada uma pelo ganho
 
 # Desenha o grafico do sinal de saida
 plt.subplot(222)
@@ -38,9 +39,6 @@ plt.ylabel('Amplitude')
 plt.xlabel('Número de Amostras')
 plt.show()
 
-"""
-f = open('sinal_saida.pcm', 'wb') 
-for sample in f:
-    for channel in channels:
-        f.write(the_bytes_in_the_right_endianness)
-        """
+with open('sinal_saida.pcm', 'wb') as f: pickle.dump(values, f)
+        
+        
