@@ -39,6 +39,8 @@ plt.ylabel('Amplitude')
 plt.xlabel('Número de Amostras')
 plt.show()
 
-with open('sinal_saida.pcm', 'wb') as f: pickle.dump(values, f)
+with open(r'sinal_saida.pcm', 'wb') as f:   # Escrever no arquivo de saída
+    for v in values:
+        f.write(v)
         
         
