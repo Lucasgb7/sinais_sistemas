@@ -7,6 +7,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
+import os
 
 with open ('alo.pcm', 'rb') as f:   # Le o arquivo em binario
     buf = f.read ()
@@ -39,8 +40,6 @@ plt.ylabel('Amplitude')
 plt.xlabel('Número de Amostras')
 plt.show()
 
-with open(r'sinal_saida.pcm', 'wb') as f:   # Escrever no arquivo de saída
+with open(r'..\Audio\sinal_saida.pcm', 'wb') as f:   # Escrever no arquivo de saída
     for v in values:
         f.write(v)
-        
-        
