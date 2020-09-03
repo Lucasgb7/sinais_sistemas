@@ -52,8 +52,8 @@ def sinusoidal():
 # Sequencia Exponencial
 def exponencial():
     n = np.arange(0, 30, 1)
-    A = 1   # valor a ser alterado
-    a = 2
+    A = 1   
+    a = .5  # valor a ser alterado
     
     s = A*a**n
     
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     plt.close('all')
     print("Selecione uma das seguintes opções: ")
     option = input("'D': Degrau Unitario \n'I': Impulso Unitario \n'S': Sequencia Sinusoidal \n'E': Sequencia Exponencial\n\n")
-    if option == 'D' : degrau_unitario()
+    inf option == 'D' : degrau_unitario()
     elif option == 'I': impulso_unitario()
     elif option == 'S': sinusoidal()
     elif option == 'E': exponencial()
