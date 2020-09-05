@@ -35,8 +35,8 @@ if __name__ == "__main__":
     plt.plot(new_data, label='Amostra')
     plt.legend(loc = 2)
     
-    """
-    with open(r'media_movel.pcm', 'wb') as f:   # Escrever no arquivo de saída
-        for d in data:
-            f.write(v)
-    """
+    
+    with open("media_movel.pcm", "wb") as new_file: # escreve no arquivo de saida
+        for x in new_data:
+            new_file.write(x)
+    new_file.close()
