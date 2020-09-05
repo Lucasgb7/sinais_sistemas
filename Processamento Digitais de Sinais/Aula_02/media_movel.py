@@ -5,7 +5,6 @@ Implementação de media movel em Python.
     Testar com diferentes tamanhos de media e salvar o arquivo de saida
     por exemplo: k = 4, k = 8, k = 16, k = 32, etc.
 """
-import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
