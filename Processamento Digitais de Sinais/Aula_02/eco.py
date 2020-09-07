@@ -33,7 +33,7 @@ for i in range(len(a)):
         
         np.concatenate([result, np.zeros(n[i], dtype = "int16")])
         
-    result = np.concatenate((result, vector_delay))
+    result = np.concatenate([result, vector_delay])
 
 plt.figure("Amostras de eco", figsize=(15,8))
 
