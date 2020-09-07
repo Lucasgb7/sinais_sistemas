@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
         coef[i] = 1.0 / k;
     }
 
-    file = fopen("alo.pcm", "rb");  // abrir o arquivo para leitura das amostras
+    file = fopen("white_noise.pcm", "rb");  // abrir o arquivo para leitura das amostras
     if (file == NULL) {
         printf("Ops! Ocorreu algum erro!\n");
         return;
