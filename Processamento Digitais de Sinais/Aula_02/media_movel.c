@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
         return;
     }
 
-    fseek(file, 0, SEEK_END);   // descola a posicao do arquivo para o fim
+    fseek(file, 0, SEEK_END);   // desloca a posicao do arquivo para o fim
     itera = ftell(file)/sizeof(short); // verifica o tamanho do arquivo
     rewind(file);   // realoca a posicao do arquivo ao inicio
 

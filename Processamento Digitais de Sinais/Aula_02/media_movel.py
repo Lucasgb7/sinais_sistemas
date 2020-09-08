@@ -15,7 +15,7 @@ def moving_average(a, n) :
     return ret[n - 1:] / n # divide os valores pelo tamanho de media
 
 if __name__ == "__main__":
-    with open ('white_noise.pcm', 'rb') as f:   # Le o arquivo em binario
+    with open ('swip.pcm', 'rb') as f:   # Le o arquivo em binario
         buf = f.read ()
         data = np.frombuffer (buf, dtype = 'int16') # Dado é inteiro de 16 bits
         L = data [:: 2]     # Canal de audio esquerdo
