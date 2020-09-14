@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Exemplo do calculo de convolucao
-    Considere o filtro media movel com k = 8.
-    A saida do filtro para as seguintes entradas:
-        Impulso uniatario;
-        Degrau unitario;
-        x[n] = [1, 0.5, 0.25, 0.125]
-        
+       
 @author: lucas
 """
 import numpy as np
