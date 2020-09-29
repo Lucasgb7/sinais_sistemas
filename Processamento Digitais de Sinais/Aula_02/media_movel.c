@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
     file = fopen("white_noise.pcm", "rb");  // abrir o arquivo para leitura das amostras
     if (file == NULL) {
         printf("Ops! Ocorreu algum erro!\n");
-        return;
+        return 0;
     }
 
     fseek(file, 0, SEEK_END);   // desloca a posicao do arquivo para o fim
