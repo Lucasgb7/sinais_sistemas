@@ -28,12 +28,12 @@ int main()
   
  
    /* abre os arquivos de entrada e saida */
-  if ((in_file = fopen("..//sweep_100_2k.pcm","rb"))==NULL)
+  if ((in_file = fopen("./sweep_100_2k.pcm","rb"))==NULL)
   {
     printf("\nErro: Nao abriu o arquivo de entrada\n");
     return 0;
   }
-  if ((out_file = fopen("..//sai_sweep_mm_4.pcm","wb"))==NULL)
+  if ((out_file = fopen("./sai_sweep_mm_4.pcm","wb"))==NULL)
   {
     printf("\nErro: Nao abriu o arquivo de saida\n");
     return 0;
