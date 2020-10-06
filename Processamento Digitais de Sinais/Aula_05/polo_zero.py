@@ -4,6 +4,7 @@ from matplotlib import patches
 from matplotlib.pyplot import axvline, axhline
 from collections import defaultdict
 
+
 def zplane(z, p):
     """Plot the complex z-plane given zeros and poles.
     """
@@ -16,15 +17,14 @@ def zplane(z, p):
                                  color='black', ls='solid', alpha=0.1)
     ax.add_patch(unit_circle)
     axvline(0, color='0.7')
-    axhline(0, color='0.7')
-
     # Plot the poles and set marker properties
     poles = plt.plot(p.real, p.imag, 'x', markersize=9, alpha=0.5)
 
     # Plot the zeros and set marker properties
     zeros = plt.plot(z.real, z.imag, 'o', markersize=9,
                      color='none', alpha=0.5,
-                     markeredgecolor=poles[0].get_color(),  # same color as poles
+                     # same color as poles
+                     markeredgecolor=poles[0].get_color(),
                      )
 
     # Scale axes to fit
@@ -34,6 +34,8 @@ def zplane(z, p):
 
     plt.show()
     return z, p
+
+
 """
         Z^2 + 1.5Z + 2
 D(Z) =  --------------
