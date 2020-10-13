@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pickle
 import os
 
-with open ('alo.pcm', 'rb') as f:   # Le o arquivo em binario
+with open ('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_01\\Python\\alo.pcm', 'rb') as f:   # Le o arquivo em binario
     buf = f.read ()
     data = np.frombuffer (buf, dtype = 'int16') # Dado é inteiro de 16 bits
     L = data [:: 2]     # Canal de audio esquerdo
@@ -40,6 +40,6 @@ plt.ylabel('Amplitude')
 plt.xlabel('Número de Amostras')
 plt.show()
 
-with open(r'..\Audio\sinal_saida.pcm', 'wb') as f:   # Escrever no arquivo de saída
+with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_01\\Audio\\sinal_saida.pcm', 'wb') as f:   # Escrever no arquivo de saída
     for v in values:
         f.write(v)
