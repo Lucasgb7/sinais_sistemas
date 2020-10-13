@@ -15,7 +15,7 @@ def moving_average(a, n) :
     return ret[n - 1:] / n # divide os valores pelo tamanho de media
 
 if __name__ == "__main__":
-    with open ('swip.pcm', 'rb') as f:   # Le o arquivo em binario
+    with open ('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_02\\swip.pcm', 'rb') as f:   # Le o arquivo em binario
         buf = f.read ()
         data = np.frombuffer (buf, dtype = 'int16') # Dado é inteiro de 16 bits
         L = data [:: 2]     # Canal de audio esquerdo
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     plt.legend(loc = 2)
     
     
-    with open("media_movel.pcm", "wb") as new_file: # escreve no arquivo de saida
+    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_02\\media_movel.pcm", "wb") as new_file: # escreve no arquivo de saida
         for x in new_data:
             new_file.write(x)
     new_file.close()

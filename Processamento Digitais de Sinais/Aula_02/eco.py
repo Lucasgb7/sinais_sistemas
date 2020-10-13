@@ -8,7 +8,7 @@ Implemente um programa em Python que execute a equacao do driagrama de blocos do
 import numpy as np
 import matplotlib.pyplot as plt
 
-with open ('alo.pcm', 'rb') as f:   # Le o arquivo em binario
+with open ('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_02\\alo.pcm', 'rb') as f:   # Le o arquivo em binario
     buf = f.read ()
     data = np.frombuffer (buf, dtype = 'int16') # Dado é inteiro de 16 bits
     L = data [:: 2]     # Canal de audio esquerdo
@@ -22,7 +22,7 @@ n = [int(t1 * Fs), int(t2 * Fs), 0] # atrasos de 10ms e 15ms
 # Ganhos
 a = [.5, .3, .2]
 delay_length = n[2]
-vector_delay = np.zeros(len(data), dtype = "int16");
+vector_delay = np.zeros(len(data), dtype = "int16")
 
 # Entradas
 result = np.copy(data)
@@ -54,7 +54,7 @@ plt.plot(result, color='red')
 plt.tight_layout()
 plt.show()
 
-with open("eco_result.pcm", "wb") as new_file:
+with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_02\\eco_result.pcm", "wb") as new_file:
     for x in result:
         new_file.write(x)
     new_file.close()
