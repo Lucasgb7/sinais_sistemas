@@ -9,4 +9,9 @@ if __name__ == "__main__":
     num = np.array([1, 1.5, 2])
     dem = np.array([1, 0, 0])
 
+    z = np.roots(num)
+    p = np.roots(dem)
+
+    print(z)
+    print(p)    
     zplane(num, dem)
