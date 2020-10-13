@@ -12,15 +12,15 @@ int main()
     float p0 = 0.6; //peso principal
     float p1 = 0.3; //peso do 1 eco
     float p2 = 0.1; //peso do 2 eco
-
-    FILE *in_file, out_file;
-    if ((in_file = fopen("HolaSemEco.pcm", "rb")) == NULL) // Abrindo o arquivo de entrada
+    
+    FILE *in_file, out_file; 
+    if ((in_file = fopen("sweep_100_2k.pcm", "rb")) == NULL) // Abrindo o arquivo de entrada
     {
         printf("\nErro: Nao abriu o arquivo de entrada\n");
         return 0;
     }
 
-    if ((out_file = fopen("HolaComEco.pcm", "wb")) == NULL) // Criando o arquivo de saida com o nome alterado
+    if ((out_file = fopen("resultado_eco.pcm", "wb")) == NULL) // Criando o arquivo de saida com o nome alterado
     {
         printf("\nErro: Nao abriu o arquivo de saida\n");
         return 0;
