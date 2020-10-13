@@ -68,7 +68,7 @@ if __name__ == "__main__":
     plt.close('all')
     print("Selecione uma das seguintes opções: ")
     option = input("'D': Degrau Unitario \n'I': Impulso Unitario \n'S': Sequencia Sinusoidal \n'E': Sequencia Exponencial\n\n")
-    inf option == 'D' : degrau_unitario()
+    if option == 'D' : degrau_unitario()
     elif option == 'I': impulso_unitario()
     elif option == 'S': sinusoidal()
     elif option == 'E': exponencial()
