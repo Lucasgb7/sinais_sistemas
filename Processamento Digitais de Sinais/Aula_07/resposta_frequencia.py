@@ -1,54 +1,57 @@
+from scipy.signal import freqz
+import scipy.signal as signal
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy import signal
-import math
+from matplotlib.pyplot import plot, subplot, xlabel, ylabel, title, grid, axis, figure, show
+"""
+Obtenha a resposta em frequencia da
+sequencia finita dada por: X[k] = {0,1; 0,2; 0,4; 0,2; 0,1}
+"""
+step = np.pi / 1000
+w = np.arange(0, np.pi, step)
+L = 8
+Fs = 8000
 
-if __name__ == "__main__":
-    step = np.pi/1000
-    w = np.arange(0, np.pi, step)
-    L = 8
-    Fs = 8000
+num = np.sin(w * L / 2)
+den = np.sin(w / 2)
+temp = num/den
 
-    num = np.sin(w*L/2)
-    den = np.sin(w/2)
-    temp = num/den
-    frequencia_rad = (1/L) *(np.absolute(temp))
+# Resposta em Radiano (RAD)
+X = (1 / L) * (abs(temp))
 
-    plt.plot(w, frequencia_rad)
-    plt.title('Frequencia (RAD)')
-    plt.xlabel('Frequencia')
-    plt.grid(True)
+subplot(3, 1, 1)
+plot(w, X)
+xlabel('Frequência')
+title('Frequência (RAD)')
+grid()
 
-    frequencia_hz = (w/np.pi)*(Fs/2)
-    plt.plot(frequencia_hz, frequencia_rad)
-    plt.title('Frequencia (HZ)')
-    plt.xlabel('Frequencia')
-    plt.grid(True)
+# Resposta em Hz
+F_Hz = (w / np.pi) * (Fs / 2)
+subplot(3, 1, 2)
+plot(F_Hz, X)
+xlabel('Frequência')
+title('Frequência (HZ)')
+grid()
 
-    atenuacao_db = 20 * math.log10(frequencia_rad)
-    plt.plot(frequencia_hz, np.vectorize(atenuacao_db))
-    plt.title('Frequencia (HZ)')
-    plt.xlabel('Frequencia')
-    plt.ylabel('Atenuacao em DB')
-    plt.grid(True)
-    axes = plt.gca()
-    axes.set_xlim([0, 4000])
-    axes.set_ylim([-70, 0])
-    
-    plt.show()
-    """
-    num = np.full(4, 1/4)
-    den = 1
-    plt.title('Magnitude em Frequencia')
 
-    figure(2)
-    % Usando freqz para obter a resposta em frequencia
-    %num = [ .25 .25 .25 .25];
-    num = zeros(1,L);
-    num(1,:) = 1/L;
-    den = [1];
-    [H, Freq] = freqz(num,den,Fs);
-    plot(Freq*Fs/(2*pi), 20*log10(abs(H)));
-    title('Magnitude da resposta em frequencia')
-    grid on;
-    """
+# Resposta em Decibel (DB)
+X_Db = 20 * np.log10(X)
+subplot(3, 1, 3)
+plot(F_Hz, X_Db)
+ylabel('Atenuação (DB)')
+xlabel('Frequência')
+title('Frequência (HZ)')
+grid()
+axis([0, 4000, -70, 0]) # define os limites para plotagem
+
+figure(2)
+
+# Reposta em frequencia
+num_ = np.zeros((1, L), dtype='float64')
+num_[0, :] = 1 / L  # num = [.25 .25 .25 .25];
+den_ = float(1)
+[w, h] = freqz(num_.T, den_, worN=Fs, fs=Fs)
+plot(w, 20 * np.log10(abs(h)), 'b')
+
+title('Magnitude (FREQ)')
+grid()
+show()
