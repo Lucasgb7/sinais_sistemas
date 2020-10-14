@@ -6,13 +6,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    with open ('sweep_100_2k.pcm', 'rb') as input_file:   # Le o arquivo em binario
+    with open ('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_06\\sweep_100_2k.pcm', 'rb') as input_file:   # Le o arquivo em binario
         buf = input_file.read ()
         input_data = np.frombuffer (buf, dtype = 'int16') # Dado é inteiro de 16 bits
         L = input_data [:: 2]     # Canal de audio esquerdo
         R = input_data [1 :: 2]   # Canal de audio direito
 
-    with open ('sai_sweep_mm_4.pcm', 'rb') as output_file:   # Le o arquivo em binario
+    with open ('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_06\\sai_sweep_mm_16.pcm', 'rb') as output_file:   # Le o arquivo em binario
         buf = output_file.read ()
         output_data = np.frombuffer (buf, dtype = 'int16') # Dado é inteiro de 16 bits
         L = output_data [:: 2]     # Canal de audio esquerdo
