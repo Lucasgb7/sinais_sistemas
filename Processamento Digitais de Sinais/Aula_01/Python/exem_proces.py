@@ -16,7 +16,7 @@ with open ('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Di
     R = data [1 :: 2]   # Canal de audio direito
 
 # Desenha o grafico do sinal de entrada
-plt.subplot(221)
+plt.subplot(211)
 plt.plot(data)
 plt.grid(True)
 plt.title('Sinal de Entrada')
@@ -32,7 +32,7 @@ for i in range(data_length):
     values[i] = data[i] * gain # Le as amostras e multiplica cada uma pelo ganho
 
 # Desenha o grafico do sinal de saida
-plt.subplot(222)
+plt.subplot(212)
 plt.plot(values)
 plt.grid(True)
 plt.title('Sinal de Saída')
