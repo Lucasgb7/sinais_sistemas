@@ -17,14 +17,18 @@ x = num/den
 mod_x = np.absolute(x)
 fase_x = np.angle(den)
 
+plt.subplot(3, 1, 2)
 plt.plot(mod_x)
 plt.title('Modulo de X')
 plt.xlabel('w')
 plt.grid(True)
 
+plt.subplot(3, 1, 3)
 plt.plot(fase_x)
 plt.title('Fase de X')
 plt.xlabel('w')
 plt.grid(True)
 
 plt.show()
+
+# Resposta em Hz
