@@ -28,12 +28,24 @@ if __name__ == "__main__":
         k = int(input("Digite o tamanho de média (k): "))
         if (k not in allowed_keys):
             print("Valores permitidos: 4, 8, 16, 32, 64, 128, 256, 512, 1024.")
-    
+
     new_data = moving_average(data, k) # Media movel
-    plt.figure(figsize=[15, 10])
-    plt.grid(True)
-    plt.plot(new_data, label='Amostra')
-    plt.legend(loc = 2)
+    
+    plt.figure("Figura 1",figsize=(15,8))
+
+    plt.subplot(211)
+    plt.title("Sinal de entrada")
+    plt.xlabel("Número de amostras")
+    plt.ylabel("Amplitude da saída")
+    plt.grid(1)
+    plt.plot(data)
+    
+    plt.subplot(212)
+    plt.title("Sinal de saída")
+    plt.xlabel("Número de amostras")
+    plt.ylabel("Amplitude da saída")
+    plt.grid(1)
+    plt.plot(new_data,color='red')
     
     
     with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_02\\media_movel.pcm", "wb") as new_file: # escreve no arquivo de saida
