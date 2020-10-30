@@ -41,8 +41,6 @@ def low_pass(inputData, outputData, y, a, b):
 
 
 def plotSignal(i, data, xLabel, yLabel, titulo):
-    figure("Digital Filters", figsize=(25, 12))
-    t = np.arange(0, len(inputData) / Fs, 1 / Fs)
     subplot(i)
     title(titulo)
     xlabel(xLabel)
@@ -88,6 +86,7 @@ if __name__ == "__main__":
 
     outputData = low_pass(inputData, outputData, y, a, b)
     data_lowPass = outputData
+    figure(1)
     plotSignal(211, inputData, "Tempo(s)", "Amplitude", "Entrada")
     plotSignal(212, data_lowPass, "Tempo(s)", "Amplitude", "Filtro passa-baixa")
     outputData = 0
@@ -95,13 +94,14 @@ if __name__ == "__main__":
 
     outputData = high_pass(inputData, outputData, y, a, b)
     data_highPass = outputData
+    figure(2)
     plotSignal(211, data_lowPass, "Tempo(s)", "Amplitude", "Filtro passa-baixa")
     plotSignal(212, data_highPass, "Tempo(s)", "Amplitude", "Filtro passa-alta")
     outputData = 0
     show()
 
-    Fc_A = 2000
-    Fc_B = 3000
+    Fc_A = 3000
+    Fc_B = 1000
     wc_A = omega_cutoff(Fc_A)
     wc_B = omega_cutoff(Fc_B)
     # Adquirindo os coeficientes
@@ -112,8 +112,19 @@ if __name__ == "__main__":
 
     outputData = band_pass(low_pass(inputData, outputData, y, A1, A2), high_pass(inputData, outputData, y, B1, B2))
     data_bandPass = outputData
+    figure(3)
     plotSignal(211, data_bandPass, "Tempo(s)", "Amplitude", "Filtro passa-faixa")
     outputData = 0
+
+    Fc_A = 1000
+    Fc_B = 3000
+    wc_A = omega_cutoff(Fc_A)
+    wc_B = omega_cutoff(Fc_B)
+    # Adquirindo os coeficientes
+    A1, A2 = coefficients(wc_A, Fl)
+    B1, B2 = coefficients(wc_B, Fl)
+    print("Coeficiente A1 e A2:", A1, A2)
+    print("Coeficiente B1 e B2:", B1, B2)
 
     outputData = band_reject(low_pass(inputData, outputData, y, A1, A2), high_pass(inputData, outputData, y, B1, B2))
     data_bandReject = outputData
