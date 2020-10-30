@@ -5,8 +5,7 @@ Created on Tue Oct 20 08:39:08 2020
 @author: lucas
 """
 from pylab import *
-import scipy.signal as signal
-
+from scipy.signal import freqz
 import numpy as np
 import matplotlib.pyplot as plt
 """
@@ -19,24 +18,24 @@ Exemplo – Transformação “s” -> “z”
 sample_rate = 8000
 media_buf = np.zeros(2)
 output = 0
-Fc = 1000
+Fc = 400
 Fs = sample_rate
 
 # Cálculo de Magnitude
 wc = 2*np.pi*Fc
 
 # F' (F_linha)
-F1 = 2 * Fs
+Fl = 2 * Fs
 
 # Coeficientes para equação
-a = wc/(F1+wc)      #  0.282
-b = (wc-F1)/(F1+wc) # -0.4361
+a = wc/(Fl+wc)      #  0.282
+b = (wc-Fl)/(Fl+wc) # -0.4361
 
 print("Coeficiente A:", a)
 print("Coeficiente B:", b)
 
 # Leitura de arquivo
-with open("sweep_3800.pcm", 'rb') as f:     # Sweep de 1 a 3.6KHz
+with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_08\\sweep_3800.pcm",'rb') as f:     # Sweep de 1 a 3.6KHz
     buf = f.read()
     data_i = np.frombuffer(buf, dtype='int16')
     data_len = len(data_i)
@@ -54,22 +53,27 @@ with open("sweep_3800.pcm", 'rb') as f:     # Sweep de 1 a 3.6KHz
 
 # 100ms
 t = np.arange(0, data_len/sample_rate, 1 / sample_rate)
-
+output_data = data_i - output_data
+figure(1)
 plt.stem(t, data_i[: len(t)], "k-", "ko", "k-", label="Input")
 plt.plot(t, output_data[: len(t)], label="Output")
 plt.legend()
+plt.title("Filtro passa-alta")
 plt.xlabel("Tempo (s)")
 plt.ylabel("Amplitude")
 plt.show()
+
+figure(2)
+num_mag = [Fl, -Fl]
+den_mag = [Fl+wc, wc-Fl]
+[w, h] = freqz(num_mag, den_mag, worN=Fs, fs=Fs)
+plt.xlabel("Tempo (s)")
+plt.ylabel("Amplitude")
+plt.title("Magnitude")
+plot(w, 20*log10(abs(h)), 'r')
 
 # Escreve resultado em outro arquivo .pcm
 file_name = "output_PA.pcm"
 with open(file_name, 'wb') as f:
     for d in output_data:
         f.write(d)
-
-if __name__ == "__main__":
-    n = 101
-    a = signal.firwin(n, cutoff = 0.3, window = "hanning", pass_zero = False)
-    mfreqz(a)
-    show()
