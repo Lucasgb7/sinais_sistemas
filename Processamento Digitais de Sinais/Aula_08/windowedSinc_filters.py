@@ -31,13 +31,14 @@ def plotSignal(data, xLabel, yLabel, titulo, color):
     tight_layout()
 
 
-def plotWindow(data1, data2, color1, color2, yLabel, xLabel, titulo):
+def plotWindow(data1, data2, color1, color2, yLabel, xLabel, titulo, l1, l2):
     title(titulo)
     xlabel(xLabel)
     ylabel(yLabel)
     grid(1)
-    plot(data1, color1)
-    plot(data2, color2)
+    h, = plot(data1, color1, label=l1)
+    b, = plot(data2, color2, label=l2)
+    legend([h, b], [l1, l2])
 
 
 def kernelFilter(i, M, h, Fc):
@@ -56,8 +57,8 @@ if __name__ == "__main__":
     M = 0.5             # Tamanho do filtro
 
     """ • Faça um programa para plotar a função Sinc.. """
-    i = arange(-M / 2, M / 2, 1 / sample)
-    sincFunction = sin(2 * pi * Fc * i) / i * pi    # sinc(i)
+    i = arange(-M/2, M/2, 1/sample)
+    sincFunction = sin(2*pi*Fc*i) / i*pi    # sinc(i)
     figure(1)
     plotSignal(sincFunction, "Nº de Amostras", "Amplitude", "Sinc Function", 'b')
     show()
@@ -67,7 +68,7 @@ if __name__ == "__main__":
     wBlackman = 0.54 - 0.46 * cos(2 * pi * i / M)   # blackman(i)
     wHamming = 0.42 - 0.5 * cos(2 * pi * i / M) + 0.08 * cos(4 * pi * i / M)    # hamming(i)
     figure(2)
-    plotWindow(wHamming, wBlackman, 'b', 'g', "Amplitude", "Nº de Amostras", "Hamming e Blackman")
+    plotWindow(wHamming, wBlackman, 'b', 'g', "Amplitude", "Nº de Amostras", "Janela Hamming e Blackman", "Hamming", "Blackman")
     show()
 
     """ • Faça um programa para plotar a Eq 16-4 para diferentes tamanhos """
@@ -89,6 +90,7 @@ if __name__ == "__main__":
     x = zeros(4999)
     y = zeros(4999)
     h = zeros(100)
+    Fs = 1000
     Fc = 0.14
     M = 100
     kernelFilter(i, M, h, Fc)
