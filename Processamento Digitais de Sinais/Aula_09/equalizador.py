@@ -45,6 +45,10 @@ if __name__ == "__main__":
     # fcPB = int(input("Determine a frequência de corte PB(fcPB): "))
     fcPA = 3000
     # fcPA = int(input("Determine a frequência de corte PA(fcPA): "))
+    fcPF1 = 600
+    # fcPF1 = int(input("Determine a frequência de corte FC1(fcPF1): "))
+    fcPF2 = 3000
+    # fcPF2 = int(input("Determine a frequência de corte FC2(fcPF2): "))
     bw = 200
     # bw = int(input("Determine a faixa de transição (BW): "))
     k = 1
@@ -54,7 +58,9 @@ if __name__ == "__main__":
     # fcN = fc / fs   # Determina a frequência de corte normalizada (entre 0.0 e 0.5)
     fcPB = fcPB / fs
     fcPA = fcPA / fs
-    m = 4 / bwN     # Determina o tamanho do filtro (M+1)
+    fcPF1 = fcPF1 / fs
+    fcPF2 = fcPF2 / fs
+    m = 4 / bwN                 # Determina o tamanho do filtro (M+1)
     i = arange(10**-9, m, 1.)   # de -m/2 ate m/2
 
     # Filtro passa-baixa
@@ -66,7 +72,11 @@ if __name__ == "__main__":
     hPA[int(m/2)] += 1
 
     # Filtro passa-faixa
-    hPF = convolve(hPA, hPB)    # PA * PB = PF
+    hPF1 = kernelFilter_K(k, m, fcPF2, i)   # Passa-Baixa (passa frequencia mais alta)
+    hPF2 = kernelFilter_K(k, m, fcPF1, i)
+    hPF2 = -hPF2
+    hPF2[int(m/2)] += 1                   # Passa-Alta (passa frequencia mais baixa)
+    hPF = convolve(hPF2, hPF1)  # PA * PB = PF
 
     gb = .7
     # gb = float(input("Defina o ganho do filtro passa-baixa (GB): "))
@@ -83,7 +93,7 @@ if __name__ == "__main__":
         outputPB = gb * convolve(hPB, inputData, 'same')
         outputPF = gf * convolve(hPF, inputData, 'same')
         outputPA = ga * convolve(hPA, inputData, 'same')
-        outputData = outputPB + outputPF + outputPA
+        outputData = outputPB + outputPA + outputPF
         outputData = outputData.astype(dtype='int16') # convertendo para tipo 16bits igual ao arquivo
 
     t = arange(0, len(inputData)/fs, 1/fs)  # amostra de tempo para 100ms
