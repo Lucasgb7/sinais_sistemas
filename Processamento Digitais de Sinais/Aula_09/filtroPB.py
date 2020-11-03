@@ -9,13 +9,6 @@ from matplotlib.pyplot import *
 from scipy.signal import freqz
 
 
-def plotSignal(data, titulo, xLabel, yLabel, color):
-    title(titulo)
-    xlabel(xLabel)
-    ylabel(yLabel)
-    grid(1)
-    plot(data, color)
-
 
 # Coeficientes
 def coefficients(wc, Fl):
@@ -23,26 +16,12 @@ def coefficients(wc, Fl):
     b = (wc - Fl) / (Fl + wc)
     return a, b
 
-
-# Filtro passa-baixa
-def low_pass(inputData, outputData, y, a, b):
-    # Arquivo cópia para salvar o resultado lido
-    outputData = zeros_like(inputData)
-    aux = zeros(2)  # Variavel auxiliar para receber cada amostra da entrada
-    previousOutput = 0  # Definindo a variavel de saida anterior como 0
-    for i in range(len(inputData)):
-        aux[0] = inputData[i]  # Recebe a amostra no momento (i)
-        y = (a * aux[0]) + (a * aux[1]) - (b * previousOutput)
-        previousOutput = y  # Salva a saída anterior
-        outputData[i] = y
-        aux[1:2] = aux[0:1]  # Iguala o final da array com o começo
-
-    return outputData
-
+def freq_DB(h):
+    return 20 * log10(abs(h))
 
 # Equation 16.4 - windowed-sic filter kernel
 def kernelFilter(M, h, fc):
-    for i in range(M):
+    for i in range(int(M)):
         if i - M / 2 == 0:
             h[i] = 2 * pi * fc
         else:
@@ -55,19 +34,59 @@ if __name__ == "__main__":
     fs = 8000; fs = int(input("Determine a frequência de amostragem (FS): "))
     fc = 800; fc = int(input("Determine a frequência de corte (FC): "))
     bw = 200; bw = int(input("Determine a faixa de transição (BW): "))
+    k = 1; k = int(input("Determine a constante (K): "))
 
     bwN = bw / fs   # Banda de transição normalizada
     fcN = fc / fs   # Determina a frequência de corte normalizada (entre 0.0 e 0.5)
     m = 4 / bwN     # Determina o tamanho do filtro (M+1)
+    i = arange(10**-9, m, 1.)   # de -m/2 ate m/2
+    # Eq. 16.4
+    h1 = k * (sin(2 * pi * fcN * (i - m / 2)) / (i - m / 2)) * (0.42 - 0.5 * cos(2 * pi * i / m) + 0.08 * cos(4 * pi * i / m))
+    h1 = h1 / sum(h1) # Normaliza a funcao
 
-    h = zeros(m)
-    h = kernelFilter(m, h, fc)
+    h2 = zeros(int(m))
+    h2 = kernelFilter(m, h2, fcN)
+    h2 = h2 / sum(h2)  # Normaliza o resultado
 
     # Leitura de arquivo
     with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_08\\sweep_3800.pcm','rb') as f:  # Sweep de 1 a 3.8KHz
         buf = f.read()
         inputData = frombuffer(buf, dtype='int16')
+        outputData = convolve(h2, inputData)
+        outputData = outputData.astype(dtype='int16') # convertendo para tipo 16bits igual ao arquivo
 
+    t = arange(0, len(inputData)/fs, 1/fs)  # amostra de tempo para 100ms
+
+    figure(1)
+    plot(t, inputData[: len(t)], label="Entrada")
+    plot(t, outputData[: len(t)], label="Saida")
+    legend()
+    xlabel("Tempo (s)")
+    ylabel("Amplitude")
+
+    # Utilizando comando freqz para plotar em frequencia
+    w1, h1 = freqz(h1, worN=fs, fs=1)
+    w2, h2 = freqz(h2, worN=fs, fs=1)
+    figure(2)
+    # plot(w1, freq_DB(h1), label="freqz1")
+    # plot(w2, freq_DB(h2), label="freqz2")
+    plot(w1, abs(h1), label="Blackman")
+    plot(w2, abs(h2), label="Hamming")
+    legend()
+    xlabel("Frequencia (Hz)")
+    ylabel("Amplitude")
+
+    grid()
+    show()
+
+    with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_08\\filtroPB.pcm', 'wb') as f:
+        for d in outputData:
+            f.write(d)
+
+    grid()
+    show()
+
+    '''
     wc = 2 * pi * fc                # Omega: Magnitude
     fl = 2 * fs                     # F'
     a, b = coefficients(wc, fl)     # Calculo dos coeficientes
@@ -80,3 +99,4 @@ if __name__ == "__main__":
     title("Magnitude da resposta em frequência")
     grid(1)
     plot(w, 20*log10(abs(h)), 'g')
+    '''
