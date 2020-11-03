@@ -49,7 +49,7 @@ if __name__ == "__main__":
     h2 = h2 / sum(h2)  # Normaliza o resultado
 
     # Leitura de arquivo
-    with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_08\\sweep_3800.pcm','rb') as f:  # Sweep de 1 a 3.8KHz
+    with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\sweep_3800.pcm','rb') as f:  # Sweep de 1 a 3.8KHz
         buf = f.read()
         inputData = frombuffer(buf, dtype='int16')
         outputData = convolve(h2, inputData)
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     grid()
     show()
 
-    with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_08\\filtroPB.pcm', 'wb') as f:
+    with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\filtroPB.pcm', 'wb') as f:
         for d in outputData:
             f.write(d)
 
