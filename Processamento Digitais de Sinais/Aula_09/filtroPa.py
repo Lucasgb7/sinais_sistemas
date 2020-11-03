@@ -34,7 +34,7 @@ def kernelFilter(M, h, fc):
 
 if __name__ == "__main__":
     fs = 8000; fs = int(input("Determine a frequência de amostragem (FS): "))
-    fc = 800; fc = int(input("Determine a frequência de corte (FC): "))
+    fc = 2000; fc = int(input("Determine a frequência de corte (FC): "))
     bw = 200; bw = int(input("Determine a faixa de transição (BW): "))
     k = 1; k = int(input("Determine a constante (K): "))
 
@@ -52,13 +52,14 @@ if __name__ == "__main__":
 
     # Inversão espectral (através do FIR PB)
     h1, h2 = -h1, -h2
+    # Soma +1 no coeficiente central
     h1[int(m/2)] += 1
     h2[int(m/2)] += 1
     # Leitura de arquivo
     with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\sweep_3800.pcm','rb') as f:  # Sweep de 1 a 3.8KHz
         buf = f.read()
         inputData = frombuffer(buf, dtype='int16')
-        outputData = convolve(h2, inputData)
+        outputData = convolve(h1, inputData)
         outputData = outputData.astype(dtype='int16') # convertendo para tipo 16bits igual ao arquivo
 
     t = arange(0, len(inputData)/fs, 1/fs)  # amostra de tempo para 100ms
@@ -74,10 +75,10 @@ if __name__ == "__main__":
     w1, h1 = freqz(h1, worN=fs, fs=1)
     w2, h2 = freqz(h2, worN=fs, fs=1)
     figure(2)
-    # plot(w1, freq_DB(h1), label="freqz1")
-    # plot(w2, freq_DB(h2), label="freqz2")
-    plot(w1, abs(h1), label="Blackman")
-    plot(w2, abs(h2), label="Hamming")
+    plot(w1, freq_DB(h1), label="Blackman")
+    plot(w2, freq_DB(h2), label="Hamming")
+    # plot(w1, abs(h1), label="Blackman")
+    # plot(w2, abs(h2), label="Hamming")
     legend()
     xlabel("Frequencia (Hz)")
     ylabel("Amplitude")

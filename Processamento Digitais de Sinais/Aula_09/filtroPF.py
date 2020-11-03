@@ -33,11 +33,16 @@ def kernelFilter(M, h, fc):
 
 
 if __name__ == "__main__":
-    fs = 8000; fs = int(input("Determine a frequência de amostragem (FS): "))
-    fc1 = 400; fc1 = int(input("Determine a frequência de corte 1(FC1): "))
-    fc2 = 800; fc2 = int(input("Determine a frequência de corte 2(FC2): "))
-    bw = 200; bw = int(input("Determine a faixa de transição (BW): "))
-    k = 1; k = int(input("Determine a constante (K): "))
+    fs = 8000
+    # fs = int(input("Determine a frequência de amostragem (FS): "))
+    fc1 = 400
+    # fc1 = int(input("Determine a frequência de corte 1(FC1): "))
+    fc2 = 800
+    # fc2 = int(input("Determine a frequência de corte 2(FC2): "))
+    bw = 200
+    # bw = int(input("Determine a faixa de transição (BW): "))
+    k = 1
+    # k = int(input("Determine a constante (K): "))
 
     bwN = bw / fs   # Banda de transição normalizada
     # fcN = fc / fs   # Determina a frequência de corte normalizada (entre 0.0 e 0.5)
