@@ -7,6 +7,7 @@
 from numpy import *
 from matplotlib.pyplot import *
 from scipy.signal import freqz
+
 '''
 Condições para implementar o algortimo LMS:
     O filtro deve ter como entrada:
@@ -26,49 +27,77 @@ Passos para implementação do algortimo LMS:
         w[n+1] = w[n] + 2*u*e[n] * x[n]
 '''
 
-
-# Equation 16.4 + Constant K
-def kernelFilter_K(k, m, fc, i):
-    h = k * (sin(2 * pi * fc * (i - m / 2)) / (i - m / 2)) * (0.42 - 0.5 * cos(2 * pi * i / m) + 0.08 * cos(4 * pi * i / m))
-    h = h / sum(h)
-    return h
-
-
 if __name__ == "__main__":
-    fs = 8000
-    # fs = int(input("Determine a frequência de amostragem (FS): "))
-    fc = 400
-    # fc = int(input("Determine a frequência de corte (FC): "))
-    bw = 200
-    # bw = int(input("Determine a faixa de transição (BW): "))
-    k = 1
-    # k = int(input("Determine a constante (K): "))
-    bwN = bw / fs  # Banda de transição normalizada
-    fcN = fc / fs  # Determina a frequência de corte normalizada (entre 0.0 e 0.5)
-    m = 4 / bwN  # Determina o tamanho do filtro (M+1)
-
-    n = 160 # numero de coeficientes
+    n = 160         # tamanho dos coeficientes
     w = zeros(n)
 
-
     # Entrada (Ruído Branco) -> x[n]
-    with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_10\\white_noise.pcm','rb') as f:
-        buf = f.read ()
-        x = np.frombuffer (buf, dtype = 'int16')
-        xn = x[0:n] # Garante que tenham os valores de entrada tenham mesmo tamanho
+    with open(
+            'C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_10\\white_noise.pcm',
+            'rb') as f:
+        buf = f.read()
+        x = np.frombuffer(buf, dtype='int16')
+        xn = x[0:n]  # Garante que tenham os valores de entrada tenham mesmo tamanho
 
     # Coeficientes de entrada
-    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_10\\coeficientes_pb.dat", 'r') as f:
+    with open(
+            "C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_10\\coeficientes_pb.dat",
+            'r') as f:
         cof = f.read().replace("\n", "").split(",")
         cof.remove('')
 
         c = np.asarray(cof, dtype=np.float16)
 
-    d = c.T * xn    # saída desejada (ideal) [utiliza coeficientes e entrada]
-    p = 1000        # periodos que fará a aprendizagem (numero de interações)
-    ta = 10**-6     # taxa de aprendizagem do sistema LMS
+    d = c.T * xn  # saída desejada (ideal) [utiliza coeficientes e entrada]
+    p = 1000  # periodos que fará a aprendizagem (numero de interações)
+    ta = 10 ** -6  # taxa de aprendizagem do sistema LMS
     for i in range(p):
-        y = w.T * xn            # realiza calculo do FIR
-        e = d - y               # taxa de erro (compara sistema ideal, com o sistema obtido até então)
-        e = e/abs(sum(e))       # normalizar o erro
-        w = w + 2 * ta * e * xn # atualiza o sistema obtido para realizar novamente o cálculo
+        y = w.T * xn  # realiza calculo do FIR
+        e = d - y  # taxa de erro (compara sistema ideal, com o sistema obtido até então)
+        e = e / abs(sum(e))  # normalizar o erro
+        w = w + 2 * ta * e * xn  # atualiza o sistema obtido para realizar novamente o cálculo
+
+    figure(1)
+    plot(xn, label="Entrada", color='cyan')
+    legend()
+    title("Ruído Branco")
+    xlabel("n")
+    ylabel("x(n)")
+
+    figure(2)
+    subplot(211)
+    plot(c, label="Coeficientes", color='green')
+    legend()
+    title("Coeficientes Filtro PB")
+    xlabel("n")
+    ylabel("w(n)")
+    subplot(212)
+    plot(w, label="Vetor de coeficientes atualizado", color='red')
+    legend()
+    title("Coenficientes aprendidos")
+    xlabel("n")
+    ylabel("w(n)")
+
+    figure(3)
+    subplot(211)
+    plot(d, label="Saída desejada", color='green')
+    legend()
+    title("Saída ideal (d[n)")
+    xlabel("n")
+    ylabel("d(n)")
+    subplot(212)
+    plot(y, label="Saída do filtro", color='red')
+    legend()
+    title("Saída do filtro (y[n])")
+    xlabel("n")
+    ylabel("y(n)")
+
+    figure(4)
+    plot(e, label="Erro", color='magenta')
+    legend()
+    title("Estimação de erro (e[n])")
+    xlabel("n")
+    ylabel("e(n)")
+
+    grid()
+    show()
