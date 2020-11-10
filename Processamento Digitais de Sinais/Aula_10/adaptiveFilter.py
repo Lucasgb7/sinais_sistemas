@@ -28,6 +28,7 @@ Passos para implementação do algortimo LMS:
 '''
 
 if __name__ == "__main__":
+    fs = 8000
     n = 160         # tamanho dos coeficientes
     w = zeros(n)
 
@@ -57,6 +58,7 @@ if __name__ == "__main__":
         e = e / abs(sum(e))  # normalizar o erro
         w = w + 2 * ta * e * xn  # atualiza o sistema obtido para realizar novamente o cálculo
 
+    t = arange(0, n/fs, 1/fs)
     figure(1)
     plot(xn, label="Entrada", color='cyan')
     legend()
@@ -74,7 +76,7 @@ if __name__ == "__main__":
     subplot(212)
     plot(w, label="Vetor de coeficientes atualizado", color='red')
     legend()
-    title("Coenficientes aprendidos")
+    title("Coenficientes aprendidos (w[n])")
     xlabel("n")
     ylabel("w(n)")
 
@@ -82,7 +84,7 @@ if __name__ == "__main__":
     subplot(211)
     plot(d, label="Saída desejada", color='green')
     legend()
-    title("Saída ideal (d[n)")
+    title("Saída ideal (d[n])")
     xlabel("n")
     ylabel("d(n)")
     subplot(212)
@@ -95,8 +97,8 @@ if __name__ == "__main__":
     figure(4)
     plot(e, label="Erro", color='magenta')
     legend()
-    title("Estimação de erro (e[n])")
-    xlabel("n")
+    title("Estimação do erro (e[n])")
+    xlabel("Nº de Amostras")
     ylabel("e(n)")
 
     grid()
