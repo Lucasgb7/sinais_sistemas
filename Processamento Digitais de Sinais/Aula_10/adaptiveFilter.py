@@ -33,6 +33,7 @@ def kernelFilter_K(k, m, fc, i):
     h = h / sum(h)
     return h
 
+
 if __name__ == "__main__":
     fs = 8000
     # fs = int(input("Determine a frequência de amostragem (FS): "))
@@ -42,36 +43,32 @@ if __name__ == "__main__":
     # bw = int(input("Determine a faixa de transição (BW): "))
     k = 1
     # k = int(input("Determine a constante (K): "))
-
     bwN = bw / fs  # Banda de transição normalizada
     fcN = fc / fs  # Determina a frequência de corte normalizada (entre 0.0 e 0.5)
     m = 4 / bwN  # Determina o tamanho do filtro (M+1)
-    i = arange(10 ** -9, m, 1.)  # de -m/2 ate m/2
+
+    n = 160 # numero de coeficientes
+    w = zeros(n)
+
 
     # Entrada (Ruído Branco) -> x[n]
     with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_10\\white_noise.pcm','rb') as f:
         buf = f.read ()
         x = np.frombuffer (buf, dtype = 'int16')
-        Lx = x[::2]
-        Rx = x[1::2]
+        xn = x[0:n] # Garante que tenham os valores de entrada tenham mesmo tamanho
 
-    # Sistema Desconhecido (Planta) -> d[n]
-    with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_10\\sistema_desconhecido.pcm','rb') as f:
-        d = np.frombuffer (buf, dtype = 'int16')
-        Ld = d[::2]
-        Rd = d[1::2]
+    # Coeficientes de entrada
+    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_10\\coeficientes_pb.dat", 'r') as f:
+        cof = f.read().replace("\n", "").split(",")
+        cof.remove('')
 
-    n = len(d)
-    # Filtro passa-baixa
-    x = kernelFilter_K(k, m, fcN, i)
+        c = np.asarray(cof, dtype=np.float16)
 
-    # Filtragem
-    y = zeros(n)
-    y[n] = w[n] * x[n]
-
-    # Estimação de erro
-    e = zeros(n)
-    e[n] = d[n] - y[n]
-
-    # Adaptação do vetor de coeficientes
-    w[n+1] = w[n] + 2 * 10**-6 * e[n] * x[n]
+    d = c.T * xn    # saída desejada (ideal) [utiliza coeficientes e entrada]
+    p = 1000        # periodos que fará a aprendizagem (numero de interações)
+    ta = 10**-6     # taxa de aprendizagem do sistema LMS
+    for i in range(p):
+        y = w.T * xn            # realiza calculo do FIR
+        e = d - y               # taxa de erro (compara sistema ideal, com o sistema obtido até então)
+        e = e/abs(sum(e))       # normalizar o erro
+        w = w + 2 * ta * e * xn # atualiza o sistema obtido para realizar novamente o cálculo

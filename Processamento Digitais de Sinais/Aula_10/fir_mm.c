@@ -8,7 +8,7 @@ Walter versão 1.0
 #include <fcntl.h>
 #include <io.h>
 
-#define NSAMPLES       4	// Tamanho da média
+#define NSAMPLES       160	// Tamanho da média
 int main()
 {
    FILE *in_file, *out_file;
@@ -21,17 +21,17 @@ int main()
 
    // Carregando os coeficientes do filtro média móvel
    float coef[NSAMPLES]={
-   				#include "coefs_mm.dat"
+   				#include "coeficientes_pb.dat"
    };
 
 
    /* abre os arquivos de entrada e saida */
-  if ((in_file = fopen("..//white_noise.pcm","rb"))==NULL)
+  if ((in_file = fopen("white_noise.pcm","rb"))==NULL)
   {
     printf("\nErro: Nao abriu o arquivo de entrada\n");
     return 0;
   }
-  if ((out_file = fopen("..//sistema_desconhecido.pcm","wb"))==NULL)
+  if ((out_file = fopen("sistema_desconhecido.pcm","wb"))==NULL)
   {
     printf("\nErro: Nao abriu o arquivo de saida\n");
     return 0;
