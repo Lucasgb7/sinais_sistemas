@@ -37,6 +37,6 @@ if __name__ == "__main__":
 
     coeficientes = kernelFilter_K(m, m, fcN, i)
     # Salva coeficientes em um arquivo .dat
-    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\coeficientes_pb.pcm", 'w') as f:
+    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\coeficientes_pb.dat", 'w') as f:
         for d in coeficientes:
             f.write(str(d.astype(np.float16)) + ",\n")
