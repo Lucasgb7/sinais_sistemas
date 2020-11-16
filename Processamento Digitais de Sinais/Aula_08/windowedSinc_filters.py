@@ -75,8 +75,8 @@ if __name__ == "__main__":
     M = 500
     Fc = 0.015
     k = 1
-    M = int(input("Determine o valor de M: "))
-    Fc = float(input("Determine o valor de Fc: "))
+    # M = int(input("Determine o valor de M: "))
+    # Fc = float(input("Determine o valor de Fc: "))
     i = arange(0, M, 1/sample)
     h = zeros(M)
     # h = k*(sin(2*pi*Fc*(i-M/2))/i-M/2) * (0.42 - 0.5*cos((2*pi*i)/M) + 0.08*cos((4*pi*i)/M))
@@ -87,24 +87,39 @@ if __name__ == "__main__":
     show()
 
     """ • Faça um programa para projetar um filtro PB. Siga os passos mostrados na tabela 16-1. """
-    x = zeros(4999)
-    y = zeros(4999)
-    h = zeros(100)
-    Fs = 1000
-    Fc = 0.14
-    M = 100
-    kernelFilter(i, M, h, Fc)
-    aux = 0
-    for i in range(M):
-        aux = aux + h[i]
+    Fs = 8000
+    bw = 400
+    Fc = 600
+    Fc = Fc / Fs
+    bw = bw / Fs
+    M = 4 / bw
+    Fl = 2 * Fs
+    wc = 2 * pi * Fc
 
-    for i in range(M):
-        h[i] = h[i] / aux
+    y = zeros(int(M))
+    j = arange(1, M, 1/Fs)
 
-    for j in range(100, len(x)):
-        y[i] = 0
-        for i in range(M):
-            y[j] = y[j] + x[j-i] * h[i]
+    y = (sin(2 * pi * Fc * (j - M / 2)) / (j - M / 2)) * (0.54 - 0.46 * cos(2 * pi * j / M))
+    for i in range(len(y)):
+        if y[i] == M/2:
+            y[i] = 2 * pi * Fc
+
+    # h = h / sum(h)  # Normaliza o resultado
+    soma = 0
+    for i in range(1, int(M)):
+        soma = soma + y[i]
+
+    soma = 0
+    for i in range(1, int(M)):
+        y[i] = y[i]/soma
+
 
     figure(4)
-    plotSignal(y, "Número de Amostras", "Amplitude", "Filtro PB", 'b')
+    num_mag = [Fl, -Fl]
+    den_mag = [Fl + wc, wc - Fl]
+    [w, h] = freqz(num_mag, den_mag, worN=Fs, fs=Fs)
+    xlabel("Tempo (s)")
+    ylabel("Amplitude")
+    title("PB - Magnitude")
+    plot(w, 20 * log10(abs(h)), 'r')
+    show()
