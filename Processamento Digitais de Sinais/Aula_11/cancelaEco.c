@@ -1,71 +1,87 @@
 #include <stdio.h>
 
-#define NSAMPLE 100
+#define NSAMPLE 900000     // Nº de Amostras
 
-int main() {
+int main()
+{
 
     FILE *Far, *Near, *Output;
 
-    if((Far = fopen("far.pcm", "rb")) == NULL){
+    if ((Far = fopen("far.pcm", "rb")) == NULL)
+    {
 
         printf("\nO arquivo FAR nao abriu");
         return 0;
     }
 
-    if((Near = fopen("near.pcm", "rb")) == NULL){
+    if ((Near = fopen("near.pcm", "rb")) == NULL)
+    {
 
         printf("\nO arquivo NEAR nao abriu");
         return 0;
     }
 
-    if((Output = fopen("output_eco.pcm", "wb")) == NULL){
+    if ((Output = fopen("output_eco.pcm", "wb")) == NULL)
+    {
 
         printf("\nO arquivo de saida nao abriu");
         return 0;
     }
 
-    int i;
-    float u = 0.002;
+    int i, j = 0;
+    float u = 0.002;    // taxa de aprendizado
 
-    short x_linhan[NSAMPLE] = {0x0};
-    float wn[NSAMPLE] = {0x0};
-    short Read_Far, Read_Near, ee, y;
+    short x[NSAMPLE] = {0x0};   // Entrada do sitema (x[n])
+    float w[NSAMPLE] = {0x0};  // Coeficientes (w[n])
+    // Entradas FAR e NEAR, Taxa de erro, Saida do filtro
+    short inputFar, inputNear, error, y;
 
-    for(i = 0; i < NSAMPLE; i++){
-
-        x_linhan[i] = 0;
-        wn[i] = 0;
+    for (i = 0; i < NSAMPLE; i++)
+    {
+        x[i] = 0;
+        w[i] = 0;
     }
     // Caminha no tamanho das amostras geradas
-    while (fread(&Read_Far, sizeof(short), 1, Far) == 1) {
-        
-        x_linhan[0] = Read_Far; // amostra inicial
-        y = 0;
+    while (fread(&inputFar, sizeof(short), 1, Far) == 1) // equanto não acabar as amostras
+    {   
+        x[0] = inputFar;    // amostra inicial
+        y = 0;              // inicializa saida FIR = 0 
         // atualiza a saida do FIR
-        for (i = 0; i <NSAMPLE; i++) {
-            y += x_linhan[i] * wn[i];
+        for (i = 0; i < NSAMPLE; i++)
+        {
+            y += w[i] * x[i];   // Filtragem: y[n] = w[n] * x[n]
         }
-        // lê o arquivo NEAR    
-        fread(&Read_Near, sizeof(short), 1, Near);
+        // começa leitura do arquivo NEAR
+        fread(&inputNear, sizeof(short), 1, Near);
 
-        ee = Read_Near - y; // atualiza erro
+        error = inputNear - y; // atualiza erro
 
-        fwrite(&ee, sizeof(short), 1, Output);
-        //printf("\t e: %f\n", ee);
-        for (i = 0; i < NSAMPLE; i++) {
-            wn[i] += u * ee * x_linhan[i];
+        fwrite(&error, sizeof(short), 1, Output);
+
+        if(j % 100000 == 0)
+        {
+            printf("Amostra[%d]\t->\t", j);
+            printf("e: %f\n", error);
+        }
+        
+        for (i = 0; i < NSAMPLE; i++)
+        {
+            w[i] += u * error * x[i];
         }
 
-        for (i = NSAMPLE; i >= 1; i--) {
-            x_linhan[i] = x_linhan[i - 1];
+        for (i = NSAMPLE; i >= 1; i--)
+        {
+            x[i] = x[i - 1];
         }
+        j++;
     }
+    /*
     printf("\n---------- RESULTADO ----------\n");
-    for(i = 0; i < NSAMPLE; i++)
+    for (i = 0; i < NSAMPLE; i++)
     {
-        printf("W[%d]: %f\n", i, wn[i]);
+        printf("W[%d]: %f\n", i, w[i]);
     }
-
+    */
     fclose(Far);
     fclose(Near);
     fclose(Output);
