@@ -30,7 +30,7 @@ def kernelFilter(M, h, fc):
 
 if __name__ == "__main__":
     fs = 8000; #fs = int(input("Determine a frequência de amostragem (FS): "))
-    fc = 800; #fc = int(input("Determine a frequência de corte (FC): "))
+    fc = 600; #fc = int(input("Determine a frequência de corte (FC): "))
     bw = 200; #bw = int(input("Determine a faixa de transição (BW): "))
     k = 1; #k = int(input("Determine a constante (K): "))
 
