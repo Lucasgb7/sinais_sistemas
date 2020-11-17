@@ -33,10 +33,14 @@ def kernelFilter(M, h, fc):
 
 
 if __name__ == "__main__":
-    fs = 8000; fs = int(input("Determine a frequência de amostragem (FS): "))
-    fc = 2000; fc = int(input("Determine a frequência de corte (FC): "))
-    bw = 200; bw = int(input("Determine a faixa de transição (BW): "))
-    k = 1; k = int(input("Determine a constante (K): "))
+    fs = 8000
+    #fs = int(input("Determine a frequência de amostragem (FS): "))
+    fc = 2000
+    #fc = int(input("Determine a frequência de corte (FC): "))
+    bw = 200
+    #bw = int(input("Determine a faixa de transição (BW): "))
+    k = 1
+    #k = int(input("Determine a constante (K): "))
 
     bwN = bw / fs   # Banda de transição normalizada
     fcN = fc / fs   # Determina a frequência de corte normalizada (entre 0.0 e 0.5)
@@ -55,6 +59,10 @@ if __name__ == "__main__":
     # Soma +1 no coeficiente central
     h1[int(m/2)] += 1
     h2[int(m/2)] += 1
+
+    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\coef_pa.dat", 'w') as f:
+        for d in h1:
+            f.write(str(d.astype(np.float16)) + ",\n")
     # Leitura de arquivo
     with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\sweep_3800.pcm','rb') as f:  # Sweep de 1 a 3.8KHz
         buf = f.read()
@@ -89,9 +97,6 @@ if __name__ == "__main__":
     with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\filtroPA.pcm', 'wb') as f:
         for d in outputData:
             f.write(d)
-
-    grid()
-    show()
 
     '''
     wc = 2 * pi * fc                # Omega: Magnitude

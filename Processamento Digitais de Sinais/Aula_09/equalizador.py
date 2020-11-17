@@ -78,6 +78,13 @@ if __name__ == "__main__":
     hPF2[int(m/2)] += 1                   # Passa-Alta (passa frequencia mais baixa)
     hPF = convolve(hPF2, hPF1)  # PA * PB = PF
 
+    h = convolve(hPA, hPB)
+    h = convolve(h, hPF)
+    print(h)
+    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\equalizador.dat", 'w') as f:
+        for d in h:
+            f.write(str(d.astype(np.float16)) + ",\n")
+
     gb = .7
     # gb = float(input("Defina o ganho do filtro passa-baixa (GB): "))
     gf = .6
@@ -125,6 +132,3 @@ if __name__ == "__main__":
     with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\equalizador.pcm', 'wb') as f:
         for d in outputData:
             f.write(d)
-
-    grid()
-    show()

@@ -8,8 +8,6 @@ from numpy import *
 from matplotlib.pyplot import *
 from scipy.signal import freqz
 
-
-
 # Coeficientes
 def coefficients(wc, Fl):
     a = wc / (Fl + wc)
@@ -48,8 +46,12 @@ if __name__ == "__main__":
     h2 = kernelFilter(m, h2, fcN)
     h2 = h2 / sum(h2)  # Normaliza o resultado
 
+    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\coef_pb.dat", 'w') as f:
+        for d in h2:
+            f.write(str(d.astype(np.float16)) + ",\n")
+
     # Leitura de arquivo
-    with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\sin_800hz.pcm','rb') as f:  # Sweep de 1 a 3.8KHz
+    with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\sweep_3800.pcm','rb') as f:  # Sweep de 1 a 3.8KHz
         buf = f.read()
         inputData = frombuffer(buf, dtype='int16')
         outputData = convolve(h2, inputData)
@@ -82,9 +84,6 @@ if __name__ == "__main__":
     with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\filtroPB.pcm', 'wb') as f:
         for d in outputData:
             f.write(d)
-
-    grid()
-    show()
 
     '''
     wc = 2 * pi * fc                # Omega: Magnitude

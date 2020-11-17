@@ -62,7 +62,10 @@ if __name__ == "__main__":
     h2 = k * (sin(2 * pi * fc2 * (i - m / 2)) / (i - m / 2)) * (0.42 - 0.5 * cos(2 * pi * i / m) + 0.08 * cos(4 * pi * i / m))
     h2 = h2 / sum(h2) # Normaliza a funcao
 
-
+    h = convolve(h1, h2)
+    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\coef_pf.dat", 'w') as f:
+        for d in h:
+            f.write(str(d.astype(np.float16)) + ",\n")
 
     # Leitura de arquivo
     with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\sweep_3800.pcm','rb') as f:  # Sweep de 1 a 3.8KHz
@@ -100,9 +103,6 @@ if __name__ == "__main__":
     with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\filtroPF.pcm', 'wb') as f:
         for d in outputData:
             f.write(d)
-
-    grid()
-    show()
 
     '''
     wc = 2 * pi * fc                # Omega: Magnitude
