@@ -8,7 +8,9 @@ Walter versão 1.0
 #include <fcntl.h>
 #include <io.h>
 
-#define NSAMPLES 637 // Tamanho da média
+//#define NSAMPLES 160    // Coef passa-baixa e passa-alta
+//#define NSAMPLES 319    // Coef passa-faixa
+#define NSAMPLES 637    // Coef equalizador
 int main()
 {
     FILE *in_file, *out_file;
@@ -21,6 +23,12 @@ int main()
 
     // Carregando os coeficientes do filtro média móvel
     float coef[NSAMPLES] = {
+        //#include "coef_pb.dat"
+        //#define SV_FILE_NAME "filtroPB_mm.pcm"
+        //#include "coef_pa.dat"
+        //#define SV_FILE_NAME "filtroPA_mm.pcm"
+        //#include "coef_pf.dat"
+        //#define SV_FILE_NAME "filtroPF_mm.pcm"
         #include "equalizador.dat"
         #define SV_FILE_NAME "equalizador_mm.pcm"
     };
