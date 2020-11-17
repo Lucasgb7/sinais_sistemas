@@ -55,7 +55,7 @@ if __name__ == "__main__":
     for i in range(p):
         y = w.T * xn  # realiza calculo do FIR
         e = d - y  # taxa de erro (compara sistema ideal, com o sistema obtido até então)
-        e = e / abs(sum(e))  # normalizar o erro
+        e = e / sum(e)  # normalizar o erro
         w = w + 2 * ta * e * xn  # atualiza o sistema obtido para realizar novamente o cálculo
 
     t = arange(0, n/fs, 1/fs)
