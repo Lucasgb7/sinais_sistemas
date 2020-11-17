@@ -17,7 +17,7 @@ int main(){
         return 0;
     }
 
-    double u = 0.000000000005;
+    double u = 0.0000000000005;
     // Comprimento do filtro
     int i, j;
 
@@ -57,7 +57,7 @@ int main(){
 
     for(i = 0; i < len; i++)
     {
-        printf("Amostra[%d]->", i);
+        //printf("Amostra[%d]->", i);
         // Lendo a amostra de entrada
         amostras = fread(&Read, sizeof(short), 1, Data_in);
         x_new = Read;
@@ -106,7 +106,7 @@ int main(){
         // Escrevendo o erro no arquivo de saida
         e_escrito = (short) ee;
         fwrite(&e_escrito, sizeof(short), 1, Data_out);
-        printf("\t e: %f\n", ee);
+        //printf("\t e: %f\n", ee);
         e_salva[i] = (short) ee;
     }
 
