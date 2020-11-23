@@ -1,10 +1,9 @@
 #include <stdio.h>
 
-#define NSAMPLE 900000     // Nº de Amostras
+#define NSAMPLE 320     // Nº de Amostras
 
 int main()
 {
-
     FILE *Far, *Near, *Output;
 
     if ((Far = fopen("far.pcm", "rb")) == NULL)
@@ -28,13 +27,13 @@ int main()
         return 0;
     }
 
-    int i, j = 0;
-    float u = 0.002;    // taxa de aprendizado
+    int samples, i, j = 0;
+    float u = 0.000000000005;    // Taxa de aprendizado
 
     short x[NSAMPLE] = {0x0};   // Entrada do sitema (x[n])
-    float w[NSAMPLE] = {0x0};  // Coeficientes (w[n])
+    short w[NSAMPLE] = {0x0};   // Coeficientes (w[n])
     // Entradas FAR e NEAR, Taxa de erro, Saida do filtro
-    short inputFar, inputNear, error, y;
+    short inputFar, inputNear, error, y, short_output;
 
     for (i = 0; i < NSAMPLE; i++)
     {
@@ -42,6 +41,33 @@ int main()
         w[i] = 0;
     }
     // Caminha no tamanho das amostras geradas
+    do{
+        y = 0;
+        samples = fread(&inputFar, sizeof(short), 1, Far);
+        x[0] = inputFar;
+
+        for (i = 0; i < NSAMPLE; i++)
+        {
+            y += w[i] * x[i];   // Filtragem: y[n] = w[n] * x[n]
+        }
+        fread(&inputNear, sizeof(short), 1, Near);
+        error = inputNear - y;
+        // Novos coeficientes
+        for (i = 0; i < NSAMPLE; i++)
+        {
+            w[i] += 2 * u * error * x[i];
+        }
+        // Deslocamento da amostra
+        for (i = NSAMPLE; i >= 1; i--)
+        {
+            x[i] = x[i - 1];
+        }
+        short_output = (short) error;   // Caso não seja feito, o valor não é lido corretamente   
+        fwrite(&short_output, sizeof(short), 1, Output);
+
+    }while(samples);
+
+    /*
     while (fread(&inputFar, sizeof(short), 1, Far) == 1) // equanto não acabar as amostras
     {   
         x[0] = inputFar;    // amostra inicial
@@ -55,10 +81,9 @@ int main()
         fread(&inputNear, sizeof(short), 1, Near);
 
         error = inputNear - y; // atualiza erro
+        short_output = (short) error;
 
-        fwrite(&error, sizeof(short), 1, Output);
-
-        if(j % 100000 == 0)
+        if(j % 30 == 0)
         {
             printf("Amostra[%d]\t->\t", j);
             printf("e: %f\n", error);
@@ -66,16 +91,17 @@ int main()
         
         for (i = 0; i < NSAMPLE; i++)
         {
-            w[i] += u * error * x[i];
+            w[i] += 2 * u * error * x[i];
         }
-
+        // Deslocamento da amostra
         for (i = NSAMPLE; i >= 1; i--)
         {
             x[i] = x[i - 1];
         }
+        fwrite(&short_output, sizeof(short), 1, Output);
         j++;
     }
-    /*
+    
     printf("\n---------- RESULTADO ----------\n");
     for (i = 0; i < NSAMPLE; i++)
     {
