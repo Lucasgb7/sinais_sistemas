@@ -18,7 +18,7 @@ def coefficients(wc, Fl):
 
 # Retorna resposta em Decibeis (DB)
 def freq_DB(h):
-    return 20 * log10(abs(h))
+    return 10 * log10(abs(h))
 
 
 # Equation 16.4 - windowed-sic filter kernel
@@ -35,7 +35,7 @@ def kernelFilter(M, h, fc):
 if __name__ == "__main__":
     fs = 8000
     #fs = int(input("Determine a frequência de amostragem (FS): "))
-    fc = 2500
+    fc = 2000
     #fc = int(input("Determine a frequência de corte (FC): "))
     bw = 200
     #bw = int(input("Determine a faixa de transição (BW): "))
@@ -80,8 +80,8 @@ if __name__ == "__main__":
     ylabel("Amplitude")
 
     # Utilizando comando freqz para plotar em frequencia
-    w1, h1 = freqz(h1, worN=fs, fs=1)
-    w2, h2 = freqz(h2, worN=fs, fs=1)
+    w1, h1 = freqz(h1, worN=fs, fs=fs)
+    w2, h2 = freqz(h2, worN=fs, fs=fs)
     figure(2)
     plot(w1, freq_DB(h1), label="Blackman")
     plot(w2, freq_DB(h2), label="Hamming")
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     # plot(w2, abs(h2), label="Hamming")
     legend()
     xlabel("Frequencia (Hz)")
-    ylabel("Amplitude")
+    ylabel("Amplitude (dB)")
 
     grid()
     show()
@@ -97,18 +97,3 @@ if __name__ == "__main__":
     with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\filtroPA.pcm', 'wb') as f:
         for d in outputData:
             f.write(d)
-
-    '''
-    wc = 2 * pi * fc                # Omega: Magnitude
-    fl = 2 * fs                     # F'
-    a, b = coefficients(wc, fl)     # Calculo dos coeficientes
-    outputPB = low_pass(inputData, 0, 0, a, b)
-
-    num = [fl, -fl]
-    den = [fl + wc, wc - fl]
-    w, h = freqz(num, den)
-    # Plotar a resposta da magnitude
-    title("Magnitude da resposta em frequência")
-    grid(1)
-    plot(w, 20*log10(abs(h)), 'g')
-    '''

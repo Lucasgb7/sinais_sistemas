@@ -87,9 +87,9 @@ if __name__ == "__main__":
 
     gb = .7
     # gb = float(input("Defina o ganho do filtro passa-baixa (GB): "))
-    gf = .6
+    gf = .5
     # gf = float(input("Defina o ganho do filtro passa-faixa (GF): "))
-    ga = .5
+    ga = .6
     # ga = float(input("Defina o ganho do filtro passa-alta (GA): "))
     # Leitura de arquivo
     with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\sweep_3800.pcm','rb') as f:  # Sweep de 1 a 3.8KHz
