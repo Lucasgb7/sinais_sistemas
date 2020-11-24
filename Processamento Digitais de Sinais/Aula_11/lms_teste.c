@@ -1,5 +1,6 @@
 #include <stdio.h>
 #define N 4
+//#define N 160
 
 int main(){
 
@@ -28,7 +29,7 @@ int main(){
     rewind(Data_in);
 
     // Criando os vetores  para ser utilziados
-    double wn[N], yn[N];            // si no funciona cambiar a float
+    double wn[N], yn[N];
     short x_linhan[N];
     for(i = 0; i < N; i++)
     {
@@ -38,6 +39,11 @@ int main(){
     }
 
     // Definindo a planta
+    /*
+    double coef[N]={
+   				#include "coef_pb_800Hz.dat"
+    };
+    */
     double Wo[] = {0.5, 0.3, -0.5, 0.8};
     int NWo = 4, amostras;
 
@@ -60,34 +66,37 @@ int main(){
         //printf("Amostra[%d]->", i);
         // Lendo a amostra de entrada
         amostras = fread(&Read, sizeof(short), 1, Data_in);
-        x_new = Read;
+        x_new = Read;   // Entrada
 
         // Filtrando o sinal de entrada x
-        x_linhan[0] = x_new;
+        x_linhan[0] = x_new;    // Entrada
 
         y = 0;
 
+        // Convolução de y(n) da entrada com o vetor de coeficientes
         for(j = 0; j < N; j++)
         {
-            y = y + x_linhan[j] * wn[j];
+            y += x_linhan[j] * wn[j];
         }
 
         y_salva[i] = y;
 
         d_new = 0;
 
+        // d(n) = convolução da entrada com o sistema desconhecido
         for(j = 0; j < NWo; j++)
         {
-            d_new = d_new + x_linhan[j] * Wo[j];
+            d_new += x_linhan[j] * Wo[j];
         }
 
         // Calculo do erro e(n) = d(n) - y(n)
+        // Diferença entre saída do sistema desconhecido e o filtro adaptativo
         ee = d_new - y;
 
         // Atualizando os coeficientes do filtro usando LMS
         for(j = 0; j < N; j++)
         {
-            wn[j] = wn[j] + u*ee*x_linhan[j];
+            wn[j] = wn[j] + u*ee*x_linhan[j];   // Sinal de erro retorna ao filtro, e calcula novos coeficientes
         }
 
         for(j = 0; j < N; j++)
@@ -95,7 +104,7 @@ int main(){
             w_salva[i][j] = wn[j];
         }
 
-        // Atualizando o vetor x_linhan
+        // Atualizando o vetor x_linhan (DESLOCAMENTO)
         for(j = N; j >= 1; j--)
         {
             x_linhan[j] = x_linhan[j-1];
@@ -105,6 +114,7 @@ int main(){
 
         // Escrevendo o erro no arquivo de saida
         e_escrito = (short) ee;
+        // Externa o sinal de erro
         fwrite(&e_escrito, sizeof(short), 1, Data_out);
         //printf("\t e: %f\n", ee);
         e_salva[i] = (short) ee;
