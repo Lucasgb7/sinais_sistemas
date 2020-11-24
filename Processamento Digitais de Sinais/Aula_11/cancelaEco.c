@@ -46,13 +46,24 @@ int main()
         samples = fread(&inputFar, sizeof(short), 1, Far);
         x[0] = inputFar;
 
+        // Amostra FAR convolui com o filtro adaptativo 
         for (i = 0; i < NSAMPLE; i++)
         {
             y += w[i] * x[i];   // Filtragem: y[n] = w[n] * x[n]
         }
-        fread(&inputNear, sizeof(short), 1, Near);
+        fread(&inputNear, sizeof(short), 1, Near);  // Planta já conhecida
         error = inputNear - y;
-        // Novos coeficientes
+
+        /*
+        if(j % 30 == 0)
+        {
+            printf("Amostra[%d]\t->\t", j);
+            printf("e: %f\n", error);
+        }
+        j++;
+        */
+
+        // Atualiza novos valores de coeficientes
         for (i = 0; i < NSAMPLE; i++)
         {
             w[i] += 2 * u * error * x[i];
@@ -64,6 +75,7 @@ int main()
         }
         short_output = (short) error;   // Caso não seja feito, o valor não é lido corretamente   
         fwrite(&short_output, sizeof(short), 1, Output);
+
 
     }while(samples);
 
