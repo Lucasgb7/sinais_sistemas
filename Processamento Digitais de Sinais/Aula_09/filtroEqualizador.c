@@ -18,7 +18,7 @@ int main()
     short sample[NSAMPLES] = {0x0};
 
     float ouputPF = 0, ouputPA = 0, ouputPB = 0, ouput_aux = 0;
-    float gPB = 1, gPF = 0, gPA = 0;
+    float gPB = 0.5, gPF = 0.5, gPA = 0.5;
     /*
    printf("Qual o Ganho para o Passa Baixa?\n");
    scanf("%f", &fatorPassaBaixa);
