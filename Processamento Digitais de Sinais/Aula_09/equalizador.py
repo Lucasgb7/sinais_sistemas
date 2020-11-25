@@ -75,21 +75,26 @@ if __name__ == "__main__":
     hPF1 = kernelFilter_K(k, m, fcPF2, i)   # Passa-Baixa (passa frequencia mais alta)
     hPF2 = kernelFilter_K(k, m, fcPF1, i)
     hPF2 = -hPF2
-    hPF2[int(m/2)] += 1                   # Passa-Alta (passa frequencia mais baixa)
-    hPF = convolve(hPF2, hPF1)  # PA * PB = PF
+    hPF2[int(m/2)] += 1                     # Passa-Alta (passa frequencia mais baixa)
+    hPF = convolve(hPF2, hPF1, 'same')  # PA * PB = PF
 
-    h = convolve(hPA, hPB)
-    h = convolve(h, hPF)
-    print(h)
-    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\equalizador.dat", 'w') as f:
-        for d in h:
+    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\coef_pb.dat", 'w') as f:
+        for d in hPB:
             f.write(str(d.astype(np.float16)) + ",\n")
 
-    gb = .7
+    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\coef_pa.dat", 'w') as f:
+        for d in hPA:
+            f.write(str(d.astype(np.float16)) + ",\n")
+
+    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\coef_pf.dat", 'w') as f:
+        for d in hPF:
+            f.write(str(d.astype(np.float16)) + ",\n")
+
+    gb = .5
     # gb = float(input("Defina o ganho do filtro passa-baixa (GB): "))
     gf = .5
     # gf = float(input("Defina o ganho do filtro passa-faixa (GF): "))
-    ga = .6
+    ga = .5
     # ga = float(input("Defina o ganho do filtro passa-alta (GA): "))
     # Leitura de arquivo
     with open('C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\sweep_3800.pcm','rb') as f:  # Sweep de 1 a 3.8KHz
