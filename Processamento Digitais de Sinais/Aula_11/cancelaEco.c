@@ -28,17 +28,18 @@ int main()
     }
 
     int samples, i, j = 0;
-    float u = 0.000000000005;    // Taxa de aprendizado
+    float u = 0.0000000000005;    // Taxa de aprendizado
 
     short x[NSAMPLE] = {0x0};   // Entrada do sitema (x[n])
-    short w[NSAMPLE] = {0x0};   // Coeficientes (w[n])
+    double w[NSAMPLE] = {0x0};   // Coeficientes (w[n])
     // Entradas FAR e NEAR, Taxa de erro, Saida do filtro
-    short inputFar, inputNear, error, y, short_output;
+    short inputFar, inputNear, short_output;
+    double y = 0.0, error = 0.0;
 
     for (i = 0; i < NSAMPLE; i++)
     {
-        x[i] = 0;
-        w[i] = 0;
+        x[i] = 0.0;
+        w[i] = 0.0;
     }
     // Caminha no tamanho das amostras geradas
     do{
@@ -69,7 +70,7 @@ int main()
             w[i] += 2 * u * error * x[i];
         }
         // Deslocamento da amostra
-        for (i = NSAMPLE; i >= 1; i--)
+        for (i = NSAMPLE-1; i > 0; i--)
         {
             x[i] = x[i - 1];
         }
@@ -78,48 +79,7 @@ int main()
 
 
     }while(samples);
-
-    /*
-    while (fread(&inputFar, sizeof(short), 1, Far) == 1) // equanto não acabar as amostras
-    {   
-        x[0] = inputFar;    // amostra inicial
-        y = 0;              // inicializa saida FIR = 0 
-        // atualiza a saida do FIR
-        for (i = 0; i < NSAMPLE; i++)
-        {
-            y += w[i] * x[i];   // Filtragem: y[n] = w[n] * x[n]
-        }
-        // começa leitura do arquivo NEAR
-        fread(&inputNear, sizeof(short), 1, Near);
-
-        error = inputNear - y; // atualiza erro
-        short_output = (short) error;
-
-        if(j % 30 == 0)
-        {
-            printf("Amostra[%d]\t->\t", j);
-            printf("e: %f\n", error);
-        }
-        
-        for (i = 0; i < NSAMPLE; i++)
-        {
-            w[i] += 2 * u * error * x[i];
-        }
-        // Deslocamento da amostra
-        for (i = NSAMPLE; i >= 1; i--)
-        {
-            x[i] = x[i - 1];
-        }
-        fwrite(&short_output, sizeof(short), 1, Output);
-        j++;
-    }
-    
-    printf("\n---------- RESULTADO ----------\n");
-    for (i = 0; i < NSAMPLE; i++)
-    {
-        printf("W[%d]: %f\n", i, w[i]);
-    }
-    */
+    printf("\nFinalizado");
     fclose(Far);
     fclose(Near);
     fclose(Output);
