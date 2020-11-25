@@ -1,6 +1,6 @@
 #include <stdio.h>
-#define N 4
-//#define N 160
+//#define N 4
+#define N 160
 
 int main(){
 
@@ -18,107 +18,75 @@ int main(){
         return 0;
     }
 
-    double u = 0.0000000000005;
-    // Comprimento do filtro
-    int i, j;
+    double u = 0.000000000005; // Taxa de aprendizado
+    int i, sampleN;             // Contador, Nº de amostras
+    double wn[N];               // Coeficiente adaptados
+    double y = 0.0;             // Saída do filtro adaptativo
+    double d = 0.0;             // Coeficientes desejados
+    double error;               // Erro 
+    // Amostras, entrada, saida e erro em short
+    short sample[N], input, output, shortError;
 
-    // Pegando a largura do FILE de entrada
-    fseek(Data_in, 0L, SEEK_END);
-    int len = ftell(Data_in);
-    printf("Tamanho da variavel len apos ftell: %d\n", len);
-    rewind(Data_in);
-
-    // Criando os vetores  para ser utilziados
-    double wn[N], yn[N];
-    short x_linhan[N];
     for(i = 0; i < N; i++)
     {
         wn[i] = 0.0;
-        yn[i] = 0.0;
-        x_linhan[i] = 0.0;
+        sample[i] = 0.0;
     }
 
     // Definindo a planta
-    /*
-    double coef[N]={
-   				#include "coef_pb_800Hz.dat"
+
+/*     float Wo[]={
+   				#include "coef_pb.dat"
+    }; */
+
+    
+    float Wo[]={
+   				#include "coef_pa.dat"
     };
-    */
-    double Wo[] = {0.5, 0.3, -0.5, 0.8};
-    int NWo = 4, amostras;
+    
+    /* double Wo[] = {0.5, 0.3, -0.5, 0.8}; */
 
-    // Criando mais vetores
-    short  Read, e_escrito, e_salva[len], y_salva[len], w_salva[len][N], x_new = 0;
-    double ee = 0, y, d_new;
-    for(i = 0; i < len; i++)
-    {
-        e_salva[i] = 0;
-        y_salva[i] = 0;
-
-        for(j = 0; j < N; j++)
-        {
-            w_salva[i][j] = 0;
-        }
-    }
-
-    for(i = 0; i < len; i++)
-    {
-        //printf("Amostra[%d]->", i);
-        // Lendo a amostra de entrada
-        amostras = fread(&Read, sizeof(short), 1, Data_in);
-        x_new = Read;   // Entrada
-
-        // Filtrando o sinal de entrada x
-        x_linhan[0] = x_new;    // Entrada
-
+    do{
+        d = 0;
         y = 0;
+        // Lendo a amostra de entrada
+        sampleN = fread(&input, sizeof(short), 1, Data_in);
+        sample[0] = input;   // Entrada
 
-        // Convolução de y(n) da entrada com o vetor de coeficientes
-        for(j = 0; j < N; j++)
+        // Convolução de y(n) da entrada com o vetor de coeficientes atualizados
+        for(i = 0; i < N; i++)
         {
-            y += x_linhan[j] * wn[j];
+            y += sample[i] * wn[i];
         }
-
-        y_salva[i] = y;
-
-        d_new = 0;
 
         // d(n) = convolução da entrada com o sistema desconhecido
-        for(j = 0; j < NWo; j++)
+        for(i = 0; i < N; i++)
         {
-            d_new += x_linhan[j] * Wo[j];
+            d += sample[i] * Wo[i];
         }
 
         // Calculo do erro e(n) = d(n) - y(n)
         // Diferença entre saída do sistema desconhecido e o filtro adaptativo
-        ee = d_new - y;
+        error = d - y;
 
         // Atualizando os coeficientes do filtro usando LMS
-        for(j = 0; j < N; j++)
+        for(i = 0; i < N; i++)
         {
-            wn[j] = wn[j] + u*ee*x_linhan[j];   // Sinal de erro retorna ao filtro, e calcula novos coeficientes
+            wn[i] += 2 * u * error * sample[i];   // Sinal de erro retorna ao filtro, e calcula novos coeficientes
         }
-
-        for(j = 0; j < N; j++)
-        {
-            w_salva[i][j] = wn[j];
-        }
-
         // Atualizando o vetor x_linhan (DESLOCAMENTO)
-        for(j = N; j >= 1; j--)
+        for(i = N; i >= 1; i--)
         {
-            x_linhan[j] = x_linhan[j-1];
+            sample[i] = sample[i-1];
         }
 
+        shortError = (short) error;
+        //shortError = (short) y;
 
-
-        // Escrevendo o erro no arquivo de saida
-        e_escrito = (short) ee;
-        // Externa o sinal de erro
-        fwrite(&e_escrito, sizeof(short), 1, Data_out);
+        fwrite(&shortError, sizeof(short), 1, Data_out);
         //printf("\t e: %f\n", ee);
-        e_salva[i] = (short) ee;
-    }
+
+    }while(sampleN);
 
     printf("\n---------- RESULTADO ----------\n");
     for(i = 0; i < N; i++)
