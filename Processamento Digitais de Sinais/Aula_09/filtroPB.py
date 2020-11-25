@@ -30,7 +30,7 @@ def kernelFilter(M, h, fc):
 
 if __name__ == "__main__":
     fs = 8000; #fs = int(input("Determine a frequência de amostragem (FS): "))
-    fc = 1000; #fc = int(input("Determine a frequência de corte (FC): "))
+    fc = 600; #fc = int(input("Determine a frequência de corte (FC): "))
     bw = 200; #bw = int(input("Determine a faixa de transição (BW): "))
     k = 1; #k = int(input("Determine a constante (K): "))
 
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     h2 = h2 / sum(h2)  # Normaliza o resultado
 
     with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\coef_pb.dat", 'w') as f:
-        for d in h2:
+        for d in h1:
             f.write(str(d.astype(np.float16)) + ",\n")
 
     # Leitura de arquivo

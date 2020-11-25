@@ -35,9 +35,9 @@ def kernelFilter(M, h, fc):
 if __name__ == "__main__":
     fs = 8000
     # fs = int(input("Determine a frequência de amostragem (FS): "))
-    fc1 = 1000
+    fc1 = 600
     # fc1 = int(input("Determine a frequência de corte 1(FC1): "))
-    fc2 = 2000
+    fc2 = 3000
     # fc2 = int(input("Determine a frequência de corte 2(FC2): "))
     bw = 200
     # bw = int(input("Determine a faixa de transição (BW): "))
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     h2 = k * (sin(2 * pi * fc2 * (i - m / 2)) / (i - m / 2)) * (0.42 - 0.5 * cos(2 * pi * i / m) + 0.08 * cos(4 * pi * i / m))
     h2 = h2 / sum(h2) # Normaliza a funcao
 
-    h = convolve(h1, h2, 'same')
+    h = convolve(h2, h1, 'same')
     with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_09\\coef_pf.dat", 'w') as f:
         for d in h:
             f.write(str(d.astype(np.float16)) + ",\n")
