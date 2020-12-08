@@ -38,9 +38,9 @@ ifeq ($(MAKECMDGOALS),fir_mm_Debug)
 
 fir_mm_Debug : ./Debug/fir_mm.dxe 
 
-Debug/fir_mm.doj :fir_mm.c $(VDSP)/Blackfin/include/stdio.h $(VDSP)/Blackfin/include/yvals.h coefs_mm_4.dat 
+./Debug/fir_mm.doj :fir_mm.c $(VDSP)/Blackfin/include/stdio.h $(VDSP)/Blackfin/include/yvals.h coefs_mm_4.dat 
 	@echo ".\fir_mm.c"
-	$(VDSP)/ccblkfn.exe -c .\fir_mm.c -file-attr ProjectName=fir_mm -g -structs-do-not-overlap -no-multiline -double-size-32 -decls-strong -warn-protos -proc ADSP-BF533 -o .\Debug\fir_mm.doj -MM
+	$(VDSP)/ccblkfn.exe -c .\fir_mm.c -file-attr ProjectName=fir_mm -O -Ov100 -g -structs-do-not-overlap -no-multiline -double-size-32 -decls-strong -warn-protos -proc ADSP-BF533 -o .\Debug\fir_mm.doj -MM
 
 ./Debug/fir_mm.dxe :$(VDSP)/Blackfin/ldf/adsp-BF533.ldf $(VDSP)/Blackfin/lib/bf532_rev_0.5/crtsf532y.doj ./Debug/fir_mm.doj $(VDSP)/Blackfin/lib/bf532_rev_0.5/__initsbsz532.doj $(VDSP)/Blackfin/lib/cplbtab533.doj $(VDSP)/Blackfin/lib/bf532_rev_0.5/crtn532y.doj $(VDSP)/Blackfin/lib/bf532_rev_0.5/libsmall532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/libio532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/libc532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/librt_fileio532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/libevent532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/libcpp532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/libf64ieee532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/libdsp532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/libsftflt532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/libetsi532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/Debug/libssl532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/Debug/libdrv532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/Debug/libusb532y.dlb $(VDSP)/Blackfin/lib/bf532_rev_0.5/libprofile532y.dlb 
 	@echo "Linking..."
@@ -51,7 +51,7 @@ endif
 ifeq ($(MAKECMDGOALS),fir_mm_Debug_clean)
 
 fir_mm_Debug_clean:
-	-$(RM) "Debug\fir_mm.doj"
+	-$(RM) ".\Debug\fir_mm.doj"
 	-$(RM) ".\Debug\fir_mm.dxe"
 	-$(RM) ".\Debug\*.ipa"
 	-$(RM) ".\Debug\*.opa"
