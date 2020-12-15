@@ -34,9 +34,9 @@ def fuzz(input, ganho, mix):
 if __name__ == "__main__":
 
     # Le o arquivo
-    sample, data = wavfile.read("acoustic.wav")
+    sample, data = wavfile.read("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_13\\Python\\acoustic.wav")
 
-    ganho = 11
+    ganho = 5
     mix = 1
 
     print("Original wave: ", data)
@@ -44,4 +44,4 @@ if __name__ == "__main__":
     output_data = fuzz(data/32768, ganho, mix)
 
     # Escreve no arquivo
-    wavfile.write("fuzz_out.wav", sample, output_data)
+    wavfile.write("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_13\\Python\\fuzz_acoustic.wav", sample, output_data)
