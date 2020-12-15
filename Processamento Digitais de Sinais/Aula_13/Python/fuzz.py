@@ -1,8 +1,9 @@
-
 import numpy as np
+from scipy.io import wavfile
 
 def sign(x):
-    aux = np.zeros_like(x, dtype="int16")
+    x = x*-1
+    aux = np.zeros_like(x, dtype="short")
     for i in range(len(x)):
         if x[i] > 0:
 
@@ -19,31 +20,28 @@ def sign(x):
 
 
 def fuzz(input, ganho, mix):
-    q = input * ganho / max(abs(input))
-    z = sign(-q) * (1-np.exp(sign(q)*q))
-    y = mix * z * max(abs(input)) / max(abs(z)) + (1-mix) * input
-    output = y * max(abs(input)) / max(abs(y))
+    q = input * ganho / np.max(abs(input))
+    print("Q: ", q)
+    z = sign(q) * (1-np.exp(sign(q)*q))
+    print("Z: ", z)
+    y = mix * z * (np.max(abs(input)) / np.max(abs(z))) + (1-mix) * input
+    print("Y: ", y)
+    output = y * np.max(abs(input)) / np.max(abs(y))
+    print("out: ", output)
     return output
-
-
 
 
 if __name__ == "__main__":
 
     # Le o arquivo
-    with open ("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_13\\Python\\acoustic.pcm", "rb") as input_f:
-        buf = input_f.read ()
-        data = np.frombuffer (buf, dtype = 'int16') 
+    sample, data = wavfile.read("acoustic.wav")
 
-
-    ganho = 1.5
+    ganho = 11
     mix = 1
 
-    output_data = fuzz(data, ganho, mix)
-    print(output_data)
+    print("Original wave: ", data)
+
+    output_data = fuzz(data/32768, ganho, mix)
 
     # Escreve no arquivo
-    with open("C:\\Users\\lucas\\Desenvolvimento\\sinais_sistemas\\Processamento Digitais de Sinais\\Aula_13\\Python\\fuzz_out.pcm", "wb") as output:
-        for x in output_data:
-            output.write(x)
-    output.close()
+    wavfile.write("fuzz_out.wav", sample, output_data)
