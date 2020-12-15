@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #define N 107972
-// recebe: entrada, ganho, e mix
 
+// Equivalente a função sign() do MATLAB
 short sign(short x)
 {
     if (x > 0)
@@ -18,6 +18,7 @@ short sign(short x)
     }   
 }
 
+// Pega o valor máximo da array
 short getMax(short x[N])
 {
     short max = 0;
@@ -31,6 +32,7 @@ short getMax(short x[N])
     return max;
 }
 
+// Pega o valor máximo da array (float)
 float getMaxFloat(float x[N])
 {
     float max = 0;
@@ -44,13 +46,16 @@ float getMaxFloat(float x[N])
     return max;
 }
 
+/* Funcao nao linear:
+f(x) = (x / |x|) (1 - e ^ (g * x^2 / |x|))
+    - x: amostra
+    - g: ganho
+*/
 void fuzzexp(short x[N], short y[N], float gain, float mix)
 {
-    printf("\nfuzexp");
     float q[N], z[N];
     int i;
     short max_x = getMax(x);
-    printf("\nmax_x: %d", max_x);
     for (i = 0; i < N; i++)
     {
         q[i] = 0;
@@ -86,21 +91,21 @@ void fuzzexp(short x[N], short y[N], float gain, float mix)
 /*
 void fuzzexp1(short x[N], short y[N], float gain, float mix)
 {
-    short q[N], z[N];
+    float q[N], z[N];
     int i;
     short max_x = getMax(x);
     printf("\nmax_x: %d", max_x);
     for (i = 0; i < N; i++)
     {
         q[i] = 0;
-        q[i] = (short) (x[i] / abs(x[i]));
+        q[i] = (float) (x[i] / abs(x[i]));
         
         if (i == 1){
             printf("\nQ[i]: %d = \t%d * %f / %d", i, q[i], x[i], gain, max_x);
             printf("\nZ[%d]: %d", i, z[i]);
         }
     }
-    short max_z = getMax(z);
+    float max_z = getMaxFloat(z);
     for (i = 0; i< N; i++)
     {
         y[i] = q[i] * (1 - exp(gain*(q[i] * x[i])));
@@ -108,10 +113,11 @@ void fuzzexp1(short x[N], short y[N], float gain, float mix)
     short max_y = getMax(y);
     for (i = 0; i< N; i++)
     {
-        y[i] = mix * y[i] + (1 - mix)*x[i];
+        y[i] = (short) (mix * y[i] + (1 - mix)*x[i]);
     }
 }
 */
+
 
 int main(){
 
@@ -122,7 +128,7 @@ int main(){
         return 0;
     }
 
-    if((Data_out = fopen("out_fuzz1.pcm", "wb")) == NULL){
+    if((Data_out = fopen("out_fuzzexp1.pcm", "wb")) == NULL){
 
         printf("O arquivo de saida nao abriu\n");
         return 0;
