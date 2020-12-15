@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define N 107972
+#define N 24000
+//#define N 107972
 
 // Equivalente a função sign() do MATLAB
 short sign(short x)
@@ -123,17 +124,17 @@ int main(){
 
     FILE *Data_in, *Data_out;
 
-    if((Data_in = fopen("acoustic.pcm", "rb")) == NULL){
+    if((Data_in = fopen("sen1hz.pcm", "rb")) == NULL){
         printf("O arquivo de entrada nao abriu\n");
         return 0;
     }
 
-    if((Data_out = fopen("out_fuzzexp1.pcm", "wb")) == NULL){
+    if((Data_out = fopen("out_sen1hz.pcm", "wb")) == NULL){
 
         printf("O arquivo de saida nao abriu\n");
         return 0;
     }
-    float gain = 11;
+    float gain = 5;
     float mix = 1;
     short input[N], output[N];
     short sample[N];
